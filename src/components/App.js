@@ -1,41 +1,30 @@
 import React, { useState } from "react";
 import Question from "./Question";
-import quiz from "../data/quiz";
+import data from "./data";
 
 function App() {
-  const [questions, setQuestions] = useState(quiz);
-  const [currentQuestionId, setCurrentQuestion] = useState(1);
-  const [score, setScore] = useState(0);
-  const currentQuestion = questions.find((q) => q.id === currentQuestionId);
+const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+const [score, setScore] = useState(0);
 
-  function handleQuestionAnswered(correct) {
-    if (currentQuestionId < questions.length) {
-      setCurrentQuestion((currentQuestionId) => currentQuestionId + 1);
-    } else {
-      setCurrentQuestion(null);
-    }
-    if (correct) {
-      setScore((score) => score + 1);
-    }
-  }
+function handleAnswered(isCorrect) {
+if (isCorrect) {
+setScore((prevScore) => prevScore + 1);
+}
 
-  return (
-    <main>
-      <section>
-        {currentQuestion ? (
-          <Question
-            question={currentQuestion}
-            onAnswered={handleQuestionAnswered}
-          />
-        ) : (
-          <>
-            <h1>Game Over</h1>
-            <h2>Total Correct: {score}</h2>
-          </>
-        )}
-      </section>
-    </main>
-  );
+if (currentQuestionIndex === data.length - 1) {
+  alert(`Game over! Your score is ${score}`);
+} else {
+  setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+}
+}
+
+const currentQuestion = data[currentQuestionIndex];
+
+return (
+<div>
+<Question question={currentQuestion} onAnswered={handleAnswered} />
+</div>
+);
 }
 
 export default App;
